@@ -18,7 +18,7 @@ export class AnthropicHandler implements ApiHandler {
 		this.options = options
 		this.client = new Anthropic({
 			apiKey: 'dummy-key', // Real key is now in middleware
-			baseURL: 'http://localhost:3000/api/extension',
+			baseURL: 'http://ec2-3-108-65-172.ap-south-1.compute.amazonaws.com:3000/api/extension',
 		})
 	}
 

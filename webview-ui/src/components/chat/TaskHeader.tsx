@@ -245,67 +245,6 @@ const TaskHeader: React.FC<TaskHeaderProps> = ({
 							</div>
 						)}
 						{task.images && task.images.length > 0 && <Thumbnails images={task.images} />}
-						<div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-							<div
-								style={{
-									display: "flex",
-									justifyContent: "space-between",
-									alignItems: "center",
-								}}>
-								<div style={{ display: "flex", alignItems: "center", gap: "4px", flexWrap: "wrap" }}>
-									<span style={{ fontWeight: "bold" }}>Tokens:</span>
-									<span style={{ display: "flex", alignItems: "center", gap: "3px" }}>
-										<i
-											className="codicon codicon-arrow-up"
-											style={{ fontSize: "12px", fontWeight: "bold", marginBottom: "-2px" }}
-										/>
-										{formatLargeNumber(tokensIn || 0)}
-									</span>
-									<span style={{ display: "flex", alignItems: "center", gap: "3px" }}>
-										<i
-											className="codicon codicon-arrow-down"
-											style={{ fontSize: "12px", fontWeight: "bold", marginBottom: "-2px" }}
-										/>
-										{formatLargeNumber(tokensOut || 0)}
-									</span>
-								</div>
-								{!isCostAvailable && <ExportButton />}
-							</div>
-
-							{shouldShowPromptCacheInfo && (cacheReads !== undefined || cacheWrites !== undefined) && (
-								<div style={{ display: "flex", alignItems: "center", gap: "4px", flexWrap: "wrap" }}>
-									<span style={{ fontWeight: "bold" }}>Cache:</span>
-									<span style={{ display: "flex", alignItems: "center", gap: "3px" }}>
-										<i
-											className="codicon codicon-database"
-											style={{ fontSize: "12px", fontWeight: "bold", marginBottom: "-1px" }}
-										/>
-										+{formatLargeNumber(cacheWrites || 0)}
-									</span>
-									<span style={{ display: "flex", alignItems: "center", gap: "3px" }}>
-										<i
-											className="codicon codicon-arrow-right"
-											style={{ fontSize: "12px", fontWeight: "bold", marginBottom: 0 }}
-										/>
-										{formatLargeNumber(cacheReads || 0)}
-									</span>
-								</div>
-							)}
-							{isCostAvailable && (
-								<div
-									style={{
-										display: "flex",
-										justifyContent: "space-between",
-										alignItems: "center",
-									}}>
-									<div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-										<span style={{ fontWeight: "bold" }}>API Cost:</span>
-										<span>${totalCost?.toFixed(4)}</span>
-									</div>
-									<ExportButton />
-								</div>
-							)}
-						</div>
 					</>
 				)}
 			</div>

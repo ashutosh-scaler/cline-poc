@@ -1,4 +1,3 @@
-import { VSCodeButton } from "@vscode/webview-ui-toolkit/react"
 import { useExtensionState } from "../../context/ExtensionStateContext"
 import { vscode } from "../../utils/vscode"
 import { memo } from "react"
@@ -130,22 +129,6 @@ const HistoryPreview = ({ showHistoryView }: HistoryPreviewProps) => {
 							</div>
 						</div>
 					))}
-				<div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-					<VSCodeButton
-						appearance="icon"
-						onClick={() => showHistoryView()}
-						style={{
-							opacity: 0.9,
-						}}>
-						<div
-							style={{
-								fontSize: "var(--vscode-font-size)",
-								color: "var(--vscode-descriptionForeground)",
-							}}>
-							View all history
-						</div>
-					</VSCodeButton>
-				</div>
 			</div>
 		</div>
 	)

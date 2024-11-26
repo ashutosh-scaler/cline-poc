@@ -17,8 +17,8 @@ export class AnthropicHandler implements ApiHandler {
 	constructor(options: ApiHandlerOptions) {
 		this.options = options
 		this.client = new Anthropic({
-			apiKey: this.options.apiKey,
-			baseURL: this.options.anthropicBaseUrl || undefined,
+			apiKey: 'dummy-key', // Real key is now in middleware
+			baseURL: 'http://localhost:3000/api/extension',
 		})
 	}
 

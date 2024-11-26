@@ -1,4 +1,4 @@
-import { VSCodeBadge, VSCodeProgressRing } from "@vscode/webview-ui-toolkit/react"
+import { VSCodeProgressRing } from "@vscode/webview-ui-toolkit/react"
 import deepEqual from "fast-deep-equal"
 import React, { memo, useEffect, useMemo, useRef } from "react"
 import { useSize } from "react-use"
@@ -442,9 +442,9 @@ export const ChatRowContent = ({
 									{icon}
 									{title}
 									{/* Need to render this everytime since it affects height of row by 2px */}
-									<VSCodeBadge style={{ opacity: cost != null && cost > 0 ? 1 : 0 }}>
+									{/* <VSCodeBadge style={{ opacity: cost != null && cost > 0 ? 1 : 0 }}>
 										${Number(cost || 0)?.toFixed(4)}
-									</VSCodeBadge>
+									</VSCodeBadge> */}
 								</div>
 								<span className={`codicon codicon-chevron-${isExpanded ? "up" : "down"}`}></span>
 							</div>

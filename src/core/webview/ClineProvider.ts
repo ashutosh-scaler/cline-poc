@@ -65,8 +65,8 @@ export const GlobalFileNames = {
 }
 
 export class ClineProvider implements vscode.WebviewViewProvider {
-	public static readonly sideBarId = "scaler-cline.SidebarProvider"
-	public static readonly tabPanelId = "scaler-cline.TabPanelProvider"
+	public static readonly sideBarId = "scaler-companion.SidebarProvider"
+	public static readonly tabPanelId = "scaler-companion.TabPanelProvider"
 	private static activeInstances: Set<ClineProvider> = new Set()
 	private disposables: vscode.Disposable[] = []
 	private view?: vscode.WebviewView | vscode.WebviewPanel

@@ -1,6 +1,6 @@
 {
-  "name": "scaler-cline",
-  "displayName": "Scaler Cline",
+  "name": "scaler-companion",
+  "displayName": "Scaler Companion",
   "description": "Autonomous coding agent right in your IDE, capable of creating/editing files, running commands, using the browser, and more with your permission every step of the way.",
   "version": "2.1.11",
   "icon": "assets/icons/icon.png",
@@ -12,15 +12,14 @@
     "vscode": "^1.84.0"
   },
   "author": {
-    "name": "Cline Bot Inc."
+    "name": "Companion Bot Inc."
   },
   "license": "Apache-2.0",
   "publisher": "ashutoshshrimal",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cline/cline"
+    "url": "https://companion.scaler.com/"
   },
-  "homepage": "https://cline.bot",
   "categories": [
     "AI",
     "Chat",
@@ -30,7 +29,7 @@
     "Testing"
   ],
   "keywords": [
-    "cline",
+    "companion",
     "claude",
     "dev",
     "openrouter",
@@ -48,24 +47,24 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "scaler-cline-ActivityBar",
-          "title": "Cline",
-          "icon": "$(robot)"
+          "id": "scaler-companion-ActivityBar",
+          "title": "Scaler Companion",
+          "icon": "assets/icons/robot_panel_light.svg"
         }
       ]
     },
     "views": {
-      "scaler-cline-ActivityBar": [
+      "scaler-companion-ActivityBar": [
         {
           "type": "webview",
-          "id": "scaler-cline.SidebarProvider",
+          "id": "scaler-companion.SidebarProvider",
           "name": ""
         }
       ]
     },
     "commands": [
       {
-        "command": "cline.plusButtonClicked",
+        "command": "companion.plusButtonClicked",
         "title": "New Task",
         "icon": "$(add)"
       }
@@ -73,9 +72,9 @@
     "menus": {
       "view/title": [
         {
-          "command": "cline.plusButtonClicked",
+          "command": "companion.plusButtonClicked",
           "group": "navigation@1",
-          "when": "view == scaler-cline.SidebarProvider"
+          "when": "view == scaler-companion.SidebarProvider"
         }
       ]
     }

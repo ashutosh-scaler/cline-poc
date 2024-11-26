@@ -141,5 +141,5 @@ export function mergeJson(
 }
 
 function getExtensionUri(): vscode.Uri {
-	return vscode.extensions.getExtension("ashutoshshrimal.scaler-cline")!.extensionUri
+	return vscode.extensions.getExtension("ashutoshshrimal.scaler-companion")!.extensionUri
 }

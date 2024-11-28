@@ -151,7 +151,7 @@ export const ChatRowContent = ({
 							getIconSpan("error", errorColor)
 						)
 					) : cost != null ? (
-						getIconSpan("check", successColor)
+						null
 					) : apiRequestFailedMessage ? (
 						getIconSpan("error", errorColor)
 					) : (
@@ -164,7 +164,7 @@ export const ChatRowContent = ({
 							<span style={{ color: errorColor, fontWeight: "bold" }}>API Streaming Failed</span>
 						)
 					) : cost != null ? (
-						<span style={{ color: normalColor, fontWeight: "bold" }}>API Request</span>
+						null
 					) : apiRequestFailedMessage ? (
 						<span style={{ color: errorColor, fontWeight: "bold" }}>API Request Failed</span>
 					) : (
@@ -421,99 +421,34 @@ export const ChatRowContent = ({
 		case "say":
 			switch (message.say) {
 				case "api_req_started":
-					return (
-						<>
-							<div
-								style={{
-									...headerStyle,
-									marginBottom:
-										(cost == null && apiRequestFailedMessage) || apiReqStreamingFailedMessage
-											? 10
-											: 0,
-									justifyContent: "space-between",
-									cursor: "pointer",
-									userSelect: "none",
-									WebkitUserSelect: "none",
-									MozUserSelect: "none",
-									msUserSelect: "none",
-								}}
-								onClick={onToggleExpand}>
-								<div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-									{icon}
-									{title}
-									{/* Need to render this everytime since it affects height of row by 2px */}
-									{/* <VSCodeBadge style={{ opacity: cost != null && cost > 0 ? 1 : 0 }}>
-										${Number(cost || 0)?.toFixed(4)}
-									</VSCodeBadge> */}
+					if (icon && title) {
+						return (
+							<>
+								<div
+									style={{
+										...headerStyle,
+										marginBottom:
+											(cost == null && apiRequestFailedMessage) || apiReqStreamingFailedMessage
+												? 10
+												: 0,
+										justifyContent: "space-between",
+										cursor: "pointer",
+										userSelect: "none",
+										WebkitUserSelect: "none",
+										MozUserSelect: "none",
+										msUserSelect: "none",
+									}}
+								>
+									<div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+										{icon}
+										{title}
+									</div>
 								</div>
-								<span className={`codicon codicon-chevron-${isExpanded ? "up" : "down"}`}></span>
-							</div>
-							{((cost == null && apiRequestFailedMessage) || apiReqStreamingFailedMessage) && (
-								<>
-									<p style={{ ...pStyle, color: "var(--vscode-errorForeground)" }}>
-										{apiRequestFailedMessage || apiReqStreamingFailedMessage}
-										{apiRequestFailedMessage?.toLowerCase().includes("powershell") && (
-											<>
-												<br />
-												<br />
-												It seems like you're having Windows PowerShell issues, please see this{" "}
-												<a
-													href="https://github.com/cline/cline/wiki/TroubleShooting-%E2%80%90-%22PowerShell-is-not-recognized-as-an-internal-or-external-command%22"
-													style={{ color: "inherit", textDecoration: "underline" }}>
-													troubleshooting guide
-												</a>
-												.
-											</>
-										)}
-									</p>
-
-									{/* {apiProvider === "" && (
-											<div
-												style={{
-													display: "flex",
-													alignItems: "center",
-													backgroundColor:
-														"color-mix(in srgb, var(--vscode-errorForeground) 20%, transparent)",
-													color: "var(--vscode-editor-foreground)",
-													padding: "6px 8px",
-													borderRadius: "3px",
-													margin: "10px 0 0 0",
-													fontSize: "12px",
-												}}>
-												<i
-													className="codicon codicon-warning"
-													style={{
-														marginRight: 6,
-														fontSize: 16,
-														color: "var(--vscode-errorForeground)",
-													}}></i>
-												<span>
-													Uh-oh, this could be a problem on end. We've been alerted and
-													will resolve this ASAP. You can also{" "}
-													<a
-														href=""
-														style={{ color: "inherit", textDecoration: "underline" }}>
-														contact us
-													</a>
-													.
-												</span>
-											</div>
-										)} */}
-								</>
-							)}
-
-							{isExpanded && (
-								<div style={{ marginTop: "10px" }}>
-									<CodeAccordian
-										code={JSON.parse(message.text || "{}").request}
-										language="markdown"
-										isExpanded={true}
-										onToggleExpand={onToggleExpand}
-									/>
-								</div>
-							)}
-						</>
-					)
+							</>
+						)
+					} else {
+						return null
+					}
 				case "api_req_finished":
 					return null // we should never see this message type
 				case "text":

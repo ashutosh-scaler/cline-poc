@@ -45,40 +45,32 @@
   "main": "./dist/extension.js",
 	"browser": "./dist/extension.js",
   "contributes": {
-    "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "scaler-companion-ActivityBar",
-          "title": "Scaler Companion",
-          "icon": "assets/icons/bot-icon.svg"
-        }
-      ]
-    },
-    "views": {
-      "scaler-companion-ActivityBar": [
-        {
-          "type": "webview",
-          "id": "scaler-companion.SidebarProvider",
-          "name": ""
-        }
-      ]
-    },
     "commands": [
       {
-        "command": "companion.plusButtonClicked",
-        "title": "New Task",
-        "icon": "$(add)"
+        "command": "companion.togglePanel",
+        "title": "Toggle Companion Panel",
+        "category": "Companion"
+      },
+      {
+        "command": "companion.settingsButtonClicked",
+        "title": "Open Settings",
+        "category": "Companion"
+      },
+      {
+        "command": "companion.historyButtonClicked",
+        "title": "View History",
+        "category": "Companion"
       }
     ],
-    "menus": {
-      "view/title": [
-        {
-          "command": "companion.plusButtonClicked",
-          "group": "navigation@1",
-          "when": "view == scaler-companion.SidebarProvider"
-        }
-      ]
-    }
+    "keybindings": [
+      {
+        "command": "companion.togglePanel",
+        "key": "ctrl+l",
+        "mac": "cmd+l",
+        "linux": "ctrl+l",
+        "win": "ctrl+l"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

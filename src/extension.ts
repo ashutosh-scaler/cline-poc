@@ -17,6 +17,7 @@ https://github.com/microsoft/vscode-webview-ui-toolkit-samples/tree/main/framewo
 */
 
 let outputChannel: vscode.OutputChannel
+let companionPanel: vscode.WebviewPanel | undefined
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -28,67 +29,64 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const sidebarProvider = new ClineProvider(context, outputChannel)
 
-	context.subscriptions.push(
-		vscode.window.registerWebviewViewProvider(ClineProvider.sideBarId, sidebarProvider, {
-			webviewOptions: { retainContextWhenHidden: true },
-		})
-	)
-
-	context.subscriptions.push(
-		vscode.commands.registerCommand("companion.plusButtonClicked", async () => {
-			outputChannel.appendLine("Plus button Clicked")
-			await sidebarProvider.clearTask()
-			await sidebarProvider.postStateToWebview()
-			await sidebarProvider.postMessageToWebview({ type: "action", action: "chatButtonClicked" })
-		})
-	)
-
-	const openClineInNewTab = async () => {
-		outputChannel.appendLine("Opening Companion in new tab")
-		// (this example uses webviewProvider activation event which is necessary to deserialize cached webview, but since we use retainContextWhenHidden, we don't need to use that event)
-		// https://github.com/microsoft/vscode-extension-samples/blob/main/webview-sample/src/extension.ts
-		const tabProvider = new ClineProvider(context, outputChannel)
-		//const column = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : undefined
-		const lastCol = Math.max(...vscode.window.visibleTextEditors.map((editor) => editor.viewColumn || 0))
-
-		// Check if there are any visible text editors, otherwise open a new group to the right
-		const hasVisibleEditors = vscode.window.visibleTextEditors.length > 0
-		if (!hasVisibleEditors) {
-			await vscode.commands.executeCommand("workbench.action.newGroupRight")
+	const toggleCompanionPanel = async () => {
+		// If panel exists, close it and return
+		if (companionPanel) {
+			companionPanel.dispose()
+			companionPanel = undefined
+			return
 		}
-		const targetCol = hasVisibleEditors ? Math.max(lastCol + 1, 1) : vscode.ViewColumn.Two
 
-		const panel = vscode.window.createWebviewPanel(ClineProvider.tabPanelId, "Scaler Companion", targetCol, {
-			enableScripts: true,
-			retainContextWhenHidden: true,
-			localResourceRoots: [context.extensionUri],
-		})
-		// TODO: use better svg icon with light and dark variants (see https://stackoverflow.com/questions/58365687/vscode-extension-iconpath)
+		outputChannel.appendLine("Opening Companion panel")
+		companionPanel = vscode.window.createWebviewPanel(
+			'companion',
+			'Companion',
+			vscode.ViewColumn.Beside, // Todo add support for always showing in last column
+			{
+				enableScripts: true,
+				retainContextWhenHidden: true,
+				localResourceRoots: [context.extensionUri],
+			}
+		)
 
-		panel.iconPath = {
+		companionPanel.iconPath = {
 			light: vscode.Uri.joinPath(context.extensionUri, "assets", "icons", "robot_panel_light.png"),
 			dark: vscode.Uri.joinPath(context.extensionUri, "assets", "icons", "robot_panel_dark.png"),
 		}
-		tabProvider.resolveWebviewView(panel)
+
+		const tabProvider = new ClineProvider(context, outputChannel)
+		tabProvider.resolveWebviewView(companionPanel)
+
+		// Reset panel reference when closed
+		companionPanel.onDidDispose(() => {
+			companionPanel = undefined
+		})
 
 		// Lock the editor group so clicking on files doesn't open them over the panel
 		await delay(100)
 		await vscode.commands.executeCommand("workbench.action.lockEditorGroup")
 	}
 
-	context.subscriptions.push(vscode.commands.registerCommand("cline.popoutButtonClicked", openClineInNewTab))
-	context.subscriptions.push(vscode.commands.registerCommand("cline.openInNewTab", openClineInNewTab))
+	// Register commands
+	context.subscriptions.push(
+		vscode.commands.registerCommand("companion.togglePanel", toggleCompanionPanel)
+	)
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.settingsButtonClicked", () => {
-			//vscode.window.showInformationMessage(message)
-			sidebarProvider.postMessageToWebview({ type: "action", action: "settingsButtonClicked" })
+		vscode.commands.registerCommand("companion.settingsButtonClicked", () => {
+			const provider = ClineProvider.getVisibleInstance()
+			if (provider) {
+				provider.postMessageToWebview({ type: "action", action: "settingsButtonClicked" })
+			}
 		})
 	)
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand("cline.historyButtonClicked", () => {
-			sidebarProvider.postMessageToWebview({ type: "action", action: "historyButtonClicked" })
+		vscode.commands.registerCommand("companion.historyButtonClicked", () => {
+			const provider = ClineProvider.getVisibleInstance()
+			if (provider) {
+				provider.postMessageToWebview({ type: "action", action: "historyButtonClicked" })
+			}
 		})
 	)
 
@@ -129,6 +127,9 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	}
 	context.subscriptions.push(vscode.window.registerUriHandler({ handleUri }))
+
+	// Automatically open the panel when extension activates
+	toggleCompanionPanel()
 
 	return createClineAPI(outputChannel, sidebarProvider)
 }

@@ -432,7 +432,6 @@ export const ChatRowContent = ({
 												? 10
 												: 0,
 										justifyContent: "space-between",
-										cursor: "pointer",
 										userSelect: "none",
 										WebkitUserSelect: "none",
 										MozUserSelect: "none",

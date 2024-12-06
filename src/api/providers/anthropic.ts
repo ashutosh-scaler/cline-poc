@@ -25,6 +25,17 @@ export class AnthropicHandler implements ApiHandler {
 	async *createMessage(systemPrompt: string, messages: Anthropic.Messages.MessageParam[]): ApiStream {
 		let stream: AnthropicStream<Anthropic.Beta.PromptCaching.Messages.RawPromptCachingBetaMessageStreamEvent>
 		const modelId = this.getModel().id
+
+		const authToken = process.env.SESSION_AUTH_TOKEN || 'dummy-auth-token'
+		const ibtsProblemId = process.env.IBTS_PROBLEM_ID || 123456
+		const assistant_slug = process.env.ASSISTANT_SLUG || 'scaler#code#nondsa';
+
+		const customHeaders: any = {
+			'Authorization': `Bearer ${authToken}`,
+			'ibts_problem_id': ibtsProblemId.toString(),
+			'assistant_slug': assistant_slug
+		}
+
 		switch (modelId) {
 			// 'latest' alias does not support cache_control
 			case "claude-3-5-sonnet-20241022":
@@ -83,7 +94,10 @@ export class AnthropicHandler implements ApiHandler {
 							case "claude-3-opus-20240229":
 							case "claude-3-haiku-20240307":
 								return {
-									headers: { "anthropic-beta": "prompt-caching-2024-07-31" },
+									headers: { 
+										"anthropic-beta": "prompt-caching-2024-07-31",
+										...customHeaders 
+									},
 								}
 							default:
 								return undefined
@@ -102,6 +116,8 @@ export class AnthropicHandler implements ApiHandler {
 					// tools,
 					// tool_choice: { type: "auto" },
 					stream: true,
+				}, {
+					headers: customHeaders
 				})) as any
 				break
 			}

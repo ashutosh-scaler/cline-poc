@@ -504,10 +504,6 @@ export const ChatRowContent = ({
 				case "completion_result":
 					return (
 						<>
-							<div style={headerStyle}>
-								{icon}
-								{title}
-							</div>
 							<div style={{ color: "var(--vscode-charts-green)", paddingTop: 10 }}>
 								<Markdown markdown={message.text} />
 							</div>
@@ -656,10 +652,6 @@ export const ChatRowContent = ({
 					if (message.text) {
 						return (
 							<div>
-								<div style={headerStyle}>
-									{icon}
-									{title}
-								</div>
 								<div style={{ color: "var(--vscode-charts-green)", paddingTop: 10 }}>
 									<Markdown markdown={message.text} />
 								</div>

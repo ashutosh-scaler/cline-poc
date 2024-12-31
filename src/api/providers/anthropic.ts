@@ -18,7 +18,7 @@ export class AnthropicHandler implements ApiHandler {
 		this.options = options
 		this.client = new Anthropic({
 			apiKey: 'dummy-key', // Real key is now in middleware
-			baseURL: 'http://ec2-3-108-65-172.ap-south-1.compute.amazonaws.com:3000/api/extension',
+			baseURL: 'https://staging.companion.scaler.com/api/extension',
 		})
 	}
 
@@ -26,14 +26,12 @@ export class AnthropicHandler implements ApiHandler {
 		let stream: AnthropicStream<Anthropic.Beta.PromptCaching.Messages.RawPromptCachingBetaMessageStreamEvent>
 		const modelId = this.getModel().id
 
-		const authToken = process.env.SESSION_AUTH_TOKEN || 'dummy-auth-token'
-		const ibtsProblemId = process.env.IBTS_PROBLEM_ID || 123456
+		const authToken = process.env.SESSION_AUTH_TOKEN || 'BAh7CToMdXNlcl9pZEkiKTdjNmNmMTQ0LTA3Y2QtNGJhNC05ZDdkLWFlZWYxODY2M2QxMAY6BkVUOg91c2VyX2VtYWlsSSIgYXNodXRvc2guc2hyaW1hbEBzY2FsZXIuY29tBjsGVDoRYXNzb2NpYXRlX2lkSSINNDY3ODcwMDEGOwZUOhNhc3NvY2lhdGVfdHlwZUkiI0ludGVydmlld2JpdFRlc3RTZXNzaW9uUHJvYmxlbQY7BlQ=--85b3db35e3897098b78706df64631b3417135284'
 		const assistant_slug = process.env.ASSISTANT_SLUG || 'scaler#code#nondsa';
 
 		const customHeaders: any = {
-			'Authorization': `Bearer ${authToken}`,
-			'ibts_problem_id': ibtsProblemId.toString(),
-			'assistant_slug': assistant_slug
+			'Authorization': authToken,
+			'X-ASSISTANT-SLUG': assistant_slug
 		}
 
 		switch (modelId) {
